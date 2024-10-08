@@ -112,14 +112,15 @@ int TBitField::operator!=(const TBitField& bf) const // сравнение
 TBitField TBitField::operator|(const TBitField& bf) // операция "или"
 {
     TBitField or(max(BitLen, bf.BitLen));
-    if (MemLen == bf.MemLen)
-    for (int i = 0; i <= or.MemLen; i++) or.pMem[i] = bf.pMem[i] | pMem[i];
-    else
+    for (TELEM i = 0; i < or .MemLen; i++)
     {
-        for (int i = 0; i <= or.MemLen; i++) {
+        if (i < MemLen && i < bf.MemLen)
+            or.pMem[i] = pMem[i] | bf.pMem[i];
+        else
+        {
             if (i < MemLen && i >= bf.MemLen) or.pMem[i] = pMem[i];
-                else
-                    if (i >= MemLen && i < bf.MemLen) or.pMem[i] = bf.pMem[i];
+            else
+                if (i >= MemLen && i < bf.MemLen) or.pMem[i] = bf.pMem[i];
         }
     }
     return or; 
@@ -128,15 +129,10 @@ TBitField TBitField::operator|(const TBitField& bf) // операция "или"
 TBitField TBitField::operator&(const TBitField& bf) // операция "и"
 {
     TBitField and (max(BitLen, bf.BitLen));
-    if (MemLen == bf.MemLen)
-        for (int i = 0; i <= and.MemLen; i++) and.pMem[i] = bf.pMem[i] & pMem[i];
-    else
+    for (TELEM i = 0; i < and.MemLen; i++)
     {
-        for (int i = 0; i <= and.MemLen; i++) {
-            if (i < MemLen && i >= bf.MemLen) and.pMem[i] = pMem[i];
-            else
-                if (i >= MemLen && i < bf.MemLen) and.pMem[i] = bf.pMem[i];
-        }
+        if ((i <= MemLen) && (i <= bf.MemLen))
+            and.pMem[i] = pMem[i] & bf.pMem[i];
     }
     return and;
 }
