@@ -111,47 +111,51 @@ int TBitField::operator!=(const TBitField& bf) const // сравнение
 
 TBitField TBitField::operator|(const TBitField& bf) // операция "или"
 {
-    TBitField or(max(BitLen, bf.BitLen));
+    TBitField or (max(BitLen, bf.BitLen));
     for (TELEM i = 0; i < or .MemLen; i++)
     {
         if (i < MemLen && i < bf.MemLen)
-            or.pMem[i] = pMem[i] | bf.pMem[i];
+            or .pMem[i] = pMem[i] | bf.pMem[i];
         else
         {
-            if (i < MemLen && i >= bf.MemLen) or.pMem[i] = pMem[i];
+            if (i < MemLen && i >= bf.MemLen) or .pMem[i] = pMem[i];
             else
-                if (i >= MemLen && i < bf.MemLen) or.pMem[i] = bf.pMem[i];
+                if (i >= MemLen && i < bf.MemLen) or .pMem[i] = bf.pMem[i];
         }
     }
-    return or; 
+    return or ;
 }
 
 TBitField TBitField::operator&(const TBitField& bf) // операция "и"
 {
-    TBitField and (max(BitLen, bf.BitLen));
-    for (TELEM i = 0; i < and.MemLen; i++)
+    TBitField and(max(BitLen, bf.BitLen));
+    int size = min(MemLen, bf.MemLen);
+    for (TELEM i = 0; i < size; i++)
     {
-        if ((i <= MemLen) && (i <= bf.MemLen))
-            and.pMem[i] = pMem[i] & bf.pMem[i];
+        and.pMem[i]= pMem[i] & bf.pMem[i];
     }
-    return and;
+    for (TELEM i = size; i < and.MemLen; i++)
+    {
+        and.pMem[i] = 0;
+    }
+    return and; 
 }
 
 TBitField TBitField::operator~(void) // отрицание
 {
- TBitField not(BitLen);
-  for (int i = 0; i < BitLen; i++) {
-      if (this->GetBit(i)) not.ClrBit(i);
-      else not.SetBit(i);
-   }
-  return not;
+    TBitField not(BitLen);
+    for (int i = 0; i < BitLen; i++) {
+        if (this->GetBit(i)) not.ClrBit(i);
+        else not.SetBit(i);
+    }
+    return not;
 }
 
 // ввод/вывод
 
 istream& operator>>(istream& istr, TBitField& bf) // ввод
 {
-    int len,bit;
+    int len, bit;
     cout << "Enter the Bitlen" << endl;
     cin >> len;
     bf = TBitField(len);
@@ -171,6 +175,6 @@ ostream& operator<<(ostream& ostr, const TBitField& bf) // вывод
     {
         if (bf.GetBit(i)) cout << i << " ";
     }
-    cout<<endl;
+    cout << endl;
     return ostr;
 }
